@@ -16,9 +16,7 @@ namespace MvcMovie.Models
         [DataType(DataType.Date, ErrorMessage = "O campo Data de lançamento tem que ter uma data válida.")]
         public DateTime ReleaseDate { get; set; }
 
-        //[Range(1, 100, ErrorMessage = "O preço deverá ser de 1 a 101.")]
-        [Range(1, 100,ErrorMessage ="O preço deverá ser de 1 a 101.")]
-        //[Range(1, 100, ErrorMessage = "O preço deverá ser de 1 a 101.")]
+        [Range(1, 100,ErrorMessage ="O preço deverá ser de 1 a 100.")]
         [DataType(DataType.Currency, ErrorMessage = "O campo Preço deve ser um número.")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
