@@ -18,6 +18,7 @@ namespace MvcMovie.Models
 
         //[Range(1, 100, ErrorMessage = "O preço deverá ser de 1 a 101.")]
         [Range(1, 100,ErrorMessage ="O preço deverá ser de 1 a 101.")]
+        //[Range(1, 100, ErrorMessage = "O preço deverá ser de 1 a 101.")]
         [DataType(DataType.Currency, ErrorMessage = "O campo Preço deve ser um número.")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
