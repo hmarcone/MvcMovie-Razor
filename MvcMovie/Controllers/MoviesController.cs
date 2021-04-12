@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
@@ -17,21 +18,53 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string findString)
+        //public async Task<IActionResult> Index(string movieGenre, string findString)
+        //{
+        //    //var movies = from m in _context.Movie
+        //    //             select m;
+
+        //    //IQueryable<Movie> movie;
+
+        //    if (!string.IsNullOrEmpty(findString))
+        //    {
+        //        IQueryable<Movie> movie = _context.Movie.Where(m => m.Title.Contains(findString));
+        //        return View(await movie.ToListAsync());
+        //    }
+
+        //    //return View(await _context.Movie.ToListAsync());
+        //    return View(await _context.Movie.ToListAsync());
+        //}
+
+        // GET: Movies
+        public async Task<IActionResult> Index(string movieGenre, string searchString)
         {
-            //var movies = from m in _context.Movie
-            //             select m;
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery = from m in _context.Movie
+                                            orderby m.Genre
+                                            select m.Genre;
 
-            //IQueryable<Movie> movie;
 
-            if (!string.IsNullOrEmpty(findString))
+            //System.Collections.Generic.IEnumerable<Movie> movies = _context.Movie.AsEnumerable();
+            var movies = from m in _context.Movie
+                         select m;
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                IQueryable<Movie> movie = _context.Movie.Where(m => m.Title.Contains(findString));
-                return View(await movie.ToListAsync());
+                movies = movies.Where(s => s.Title.Contains(searchString));
             }
 
-            //return View(await _context.Movie.ToListAsync());
-            return View(await _context.Movie.ToListAsync());
+            if (!string.IsNullOrEmpty(movieGenre))
+            {
+                movies = movies.Where(x => x.Genre == movieGenre);
+            }
+
+            var movieGenreVM = new MovieGenreViewModel
+            {
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Movies = await movies.ToListAsync()
+            };
+
+            return View(movieGenreVM);
         }
 
         // GET: Movies/Details/5
